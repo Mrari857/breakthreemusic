@@ -16,6 +16,7 @@
     align-items: center;
     justify-content: center;
     user-select: none;
+    cursor: pointer;
   }
 
   #player {
@@ -112,13 +113,18 @@
   audio.volume = 1;
   audio.muted = false;
 
-  // START MUSIC ON FIRST CLICK (iframe-safe)
-  document.addEventListener("click", () => {
-    audio.play();
-    playPause.textContent = "⏸";
-  }, { once: true });
+  // START MUSIC ON FIRST CLICK OR TOUCH (iframe safe)
+  function startAudio() {
+    audio.play().then(() => {
+      playPause.textContent = "⏸";
+    }).catch(() => {});
+  }
 
-  playPause.onclick = () => {
+  document.body.addEventListener("click", startAudio, { once: true });
+  document.body.addEventListener("touchstart", startAudio, { once: true });
+
+  playPause.onclick = (e) => {
+    e.stopPropagation();
     if (audio.paused) {
       audio.play();
       playPause.textContent = "⏸";
