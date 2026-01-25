@@ -15,8 +15,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    user-select: none;
-    cursor: pointer;
   }
 
   #player {
@@ -89,7 +87,7 @@
   <div id="title">DJVI — Cant Let Go</div>
 
   <div id="controls">
-    <button id="playPause">▶</button>
+    <button id="playPause">⏸</button>
 
     <div id="volWrap">
       🔊
@@ -100,7 +98,7 @@
   <input type="range" id="progress" value="0" min="0" step="1">
 </div>
 
-<audio id="audio" loop>
+<audio id="audio" autoplay loop>
   <source src="https://raw.githubusercontent.com/Mrari857/shinemusic/main/DJVI_-_Cant_Let_Go_(mp3.pm).mp3" type="audio/mpeg">
 </audio>
 
@@ -113,18 +111,7 @@
   audio.volume = 1;
   audio.muted = false;
 
-  // START MUSIC ON FIRST CLICK OR TOUCH (iframe safe)
-  function startAudio() {
-    audio.play().then(() => {
-      playPause.textContent = "⏸";
-    }).catch(() => {});
-  }
-
-  document.body.addEventListener("click", startAudio, { once: true });
-  document.body.addEventListener("touchstart", startAudio, { once: true });
-
-  playPause.onclick = (e) => {
-    e.stopPropagation();
+  playPause.onclick = () => {
     if (audio.paused) {
       audio.play();
       playPause.textContent = "⏸";
