@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Neon Player</title>
+
 <style>
   body {
     margin: 0;
@@ -81,10 +82,11 @@
   }
 </style>
 </head>
+
 <body>
 
 <div id="player">
-  <div id="title">DJVI - Can't let Go</div>
+  <div id="title">DJVI – Can't Let Go</div>
 
   <div id="controls">
     <button id="playPause">▶</button>
@@ -98,8 +100,15 @@
   <input type="range" id="progress" value="0" min="0" step="1">
 </div>
 
-<audio id="audio">
-  <source src="https://cdn.jsdelivr.net/gh/mrari857/Music@main/DJVI_-_Cant_Let_Go_(mp3.pm).mp3" type="audio/mpeg">
+<audio
+  id="audio"
+  preload="metadata"
+  crossorigin="anonymous"
+>
+  <source
+    src="https://cdn.jsdelivr.net/gh/mrari857/Music@main/DJVI_-_Cant_Let_Go_(mp3.pm).mp3"
+    type="audio/mpeg"
+  >
 </audio>
 
 <script>
@@ -110,29 +119,42 @@
 
   audio.volume = volume.value;
 
-  playPause.onclick = () => {
-    if (audio.paused) {
-      audio.play();
-      playPause.textContent = "⏸";
-    } else {
-      audio.pause();
+  playPause.addEventListener("click", async () => {
+    try {
+      if (audio.paused) {
+        await audio.play();
+        playPause.textContent = "⏸";
+      } else {
+        audio.pause();
+        playPause.textContent = "▶";
+      }
+    } catch (e) {
+      console.error("Audio playback blocked:", e);
       playPause.textContent = "▶";
     }
-  };
+  });
 
-  volume.oninput = () => audio.volume = volume.value;
+  volume.addEventListener("input", () => {
+    audio.volume = volume.value;
+  });
 
   audio.addEventListener("loadedmetadata", () => {
-    progress.max = Math.floor(audio.duration);
+    if (!isNaN(audio.duration)) {
+      progress.max = Math.floor(audio.duration);
+    }
   });
 
   audio.addEventListener("timeupdate", () => {
-    progress.value = Math.floor(audio.currentTime);
+    if (!isNaN(audio.currentTime)) {
+      progress.value = Math.floor(audio.currentTime);
+    }
   });
 
-  progress.oninput = () => {
-    audio.currentTime = progress.value;
-  };
+  progress.addEventListener("input", () => {
+    if (!isNaN(audio.duration)) {
+      audio.currentTime = progress.value;
+    }
+  });
 </script>
 
 </body>
