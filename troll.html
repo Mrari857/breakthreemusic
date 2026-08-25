@@ -9,13 +9,19 @@
     box-sizing: border-box;
   }
 
+  html,
   body {
+    width: 100%;
+    height: 100%;
     margin: 0;
-    width: 240px;
-    height: 110px;
+    padding: 0;
+    overflow: hidden;
     background: transparent;
+  }
+
+  body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: #eef8ff;
+    color: #eaf7ff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,34 +29,53 @@
 
   #player {
     position: relative;
-    width: 232px;
-    padding: 10px;
-    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    padding: clamp(8px, 3%, 16px);
+    border-radius: 10px;
 
-    /* glass */
-    background: rgba(18, 27, 38, 0.72);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 18, 30, 0.45);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 
-    /* subtle border */
-    border: 1px solid rgba(100, 190, 255, 0.25);
+    border: 1px solid rgba(100, 200, 255, 0.35);
 
-    /* blue ambient glow */
     box-shadow:
-      0 0 8px rgba(40, 150, 255, 0.18),
-      0 0 22px rgba(30, 120, 255, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      0 0 8px rgba(70, 180, 255, 0.25),
+      0 0 18px rgba(50, 160, 255, 0.18),
+      inset 0 0 15px rgba(80, 190, 255, 0.06);
+
+    transition:
+      transform 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background 0.25s ease;
+  }
+
+  /* Mouse hover animation */
+  #player:hover {
+    transform: scale(1.015);
+
+    background: rgba(10, 25, 42, 0.55);
+
+    border-color: rgba(130, 215, 255, 0.85);
+
+    box-shadow:
+      0 0 10px rgba(70, 190, 255, 0.55),
+      0 0 25px rgba(50, 170, 255, 0.4),
+      0 0 45px rgba(30, 130, 255, 0.18),
+      inset 0 0 18px rgba(80, 200, 255, 0.1);
   }
 
   #title {
-    font-size: 13px;
+    font-size: clamp(11px, 5vw, 15px);
     font-weight: 600;
     margin-bottom: 8px;
 
     color: #eaf7ff;
 
     text-shadow:
-      0 0 8px rgba(90, 190, 255, 0.35);
+      0 0 6px rgba(100, 200, 255, 0.45);
 
     white-space: nowrap;
     overflow: hidden;
@@ -64,33 +89,39 @@
   }
 
   button {
-    width: 30px;
-    height: 28px;
-    padding: 0;
+    width: 32px;
+    height: 30px;
 
-    background: rgba(35, 55, 72, 0.7);
-    border: 1px solid rgba(100, 190, 255, 0.28);
-    border-radius: 5px;
+    background: rgba(20, 40, 58, 0.55);
+
+    border: 1px solid rgba(100, 200, 255, 0.4);
+    border-radius: 6px;
 
     color: #dff5ff;
-    font-size: 13px;
+    font-size: 14px;
 
     cursor: pointer;
 
-    box-shadow:
-      0 0 7px rgba(40, 160, 255, 0.12),
-      inset 0 1px rgba(255, 255, 255, 0.06);
-
-    transition: 0.15s ease;
+    transition:
+      background 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.15s ease;
   }
 
   button:hover {
-    background: rgba(45, 80, 105, 0.85);
-    border-color: rgba(100, 200, 255, 0.55);
+    background: rgba(50, 110, 150, 0.5);
+    border-color: rgba(150, 225, 255, 0.9);
 
     box-shadow:
-      0 0 10px rgba(40, 170, 255, 0.3),
-      0 0 20px rgba(40, 130, 255, 0.12);
+      0 0 8px rgba(70, 190, 255, 0.5),
+      0 0 16px rgba(50, 160, 255, 0.25);
+
+    transform: translateY(-1px);
+  }
+
+  button:active {
+    transform: scale(0.94);
   }
 
   #volWrap {
@@ -98,14 +129,14 @@
     align-items: center;
     gap: 5px;
 
-    color: #b8dfff;
+    color: #bde7ff;
     font-size: 12px;
   }
 
   #volume {
-    width: 65px;
+    width: 70px;
     height: 4px;
-    accent-color: #4db8ff;
+    accent-color: #5cc7ff;
     cursor: pointer;
   }
 
@@ -113,14 +144,14 @@
     display: block;
     width: 100%;
     height: 5px;
-    margin-top: 9px;
+    margin-top: 10px;
 
-    accent-color: #4db8ff;
+    accent-color: #5cc7ff;
     cursor: pointer;
   }
 
   #status {
-    color: rgba(200, 225, 240, 0.65);
+    color: rgba(200, 230, 245, 0.65);
     font-size: 9px;
     margin-top: 4px;
   }
