@@ -4,325 +4,321 @@
 <meta charset="UTF-8">
 <title>Neon Player</title>
 <style>
-  * {
-    box-sizing: border-box;
+* {
+  box-sizing: border-box;
+}
+
+/* Completely transparent iframe page */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  background: transparent !important;
+  background-color: transparent !important;
+
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  color: #eaf7ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   PLAYER
+   ========================= */
+
+#player {
+  position: relative;
+  isolation: isolate;
+
+  width: 100%;
+  height: 100%;
+
+  padding: clamp(8px, 3%, 16px);
+
+  border-radius: 18px;
+
+  /* ZERO BACKGROUND COLOR */
+  background: none !important;
+  background-color: transparent !important;
+
+  /* Subtle border */
+  border: 1px solid rgba(120, 215, 255, 0.45);
+
+  overflow: hidden;
+
+  /* ONLY BLUE BORDER GLOW */
+  box-shadow:
+    0 0 5px rgba(80, 200, 255, 0.45);
+
+  transition: 0.25s ease;
+}
+
+
+/* =========================
+   MOVING BLUE BORDER
+   ========================= */
+
+#player::before {
+  content: "";
+
+  position: absolute;
+
+  inset: -60%;
+
+  z-index: -1;
+
+  background: conic-gradient(
+    from 0deg,
+
+    transparent 0deg,
+    transparent 320deg,
+
+    rgba(60, 190, 255, 0.15) 330deg,
+    rgba(100, 220, 255, 0.7) 340deg,
+    rgba(180, 240, 255, 1) 348deg,
+    rgba(70, 190, 255, 0.2) 355deg,
+
+    transparent 360deg
+  );
+
+  filter: blur(4px);
+
+  animation: borderSpin 2.2s linear infinite;
+}
+
+
+/* sharper moving highlight */
+
+#player::after {
+  content: "";
+
+  position: absolute;
+
+  inset: -60%;
+
+  z-index: -1;
+
+  background: conic-gradient(
+    from 0deg,
+
+    transparent 0deg,
+    transparent 335deg,
+
+    rgba(130, 225, 255, 0.2) 340deg,
+    rgba(190, 245, 255, 1) 347deg,
+    rgba(70, 190, 255, 0.15) 353deg,
+
+    transparent 360deg
+  );
+
+  filter: blur(1px);
+
+  animation: borderSpin 2.2s linear infinite;
+}
+
+
+/* Circular movement */
+
+@keyframes borderSpin {
+  from {
+    transform: rotate(0deg);
   }
 
-  html,
-  body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: transparent !important;
+  to {
+    transform: rotate(360deg);
   }
+}
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: #eaf7ff;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+/* =========================
+   HOVER
+   ========================= */
 
-  /* =========================
-     PLAYER
-     ========================= */
+#player:hover {
+  border-color: rgba(180, 240, 255, 0.9);
 
-  #player {
-    position: relative;
-    isolation: isolate;
+  box-shadow:
+    0 0 6px rgba(130, 225, 255, 0.9),
+    0 0 15px rgba(80, 200, 255, 0.6),
+    0 0 30px rgba(40, 160, 255, 0.3);
 
-    width: 100%;
-    height: 100%;
+  transform: scale(1.015);
+}
 
-    padding: clamp(8px, 3%, 16px);
 
-    border-radius: 18px;
+/* =========================
+   TITLE
+   ========================= */
 
-    /* COMPLETELY TRANSPARENT */
-    background: transparent !important;
+#title {
+  position: relative;
+  z-index: 5;
 
-    border: 1px solid rgba(120, 215, 255, 0.35);
+  font-size: clamp(11px, 5vw, 15px);
 
-    overflow: hidden;
+  font-weight: 600;
 
-    /* Very subtle permanent border glow */
-    box-shadow:
-      0 0 5px rgba(80, 190, 255, 0.35);
+  margin-bottom: 8px;
 
-    transition: transform 0.25s ease;
-  }
+  color: #eaf7ff;
 
+  text-shadow:
+    0 0 6px rgba(100, 210, 255, 0.8),
+    0 0 15px rgba(60, 180, 255, 0.35);
 
-  /* =========================
-     MOVING BORDER GLOW
-     ========================= */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  #player::before {
-    content: "";
 
-    position: absolute;
+/* =========================
+   CONTROLS
+   ========================= */
 
-    inset: -50%;
+#controls {
+  position: relative;
+  z-index: 5;
 
-    z-index: -1;
+  display: flex;
 
-    /*
-      Bright section of the border.
-      It rotates around the entire player.
-    */
-    background: conic-gradient(
-      from 0deg,
+  align-items: center;
 
-      transparent 0deg,
-      transparent 315deg,
+  gap: 8px;
+}
 
-      rgba(80, 200, 255, 0.05) 325deg,
-      rgba(100, 220, 255, 0.25) 335deg,
-      rgba(150, 235, 255, 1) 345deg,
-      rgba(80, 190, 255, 0.35) 355deg,
 
-      transparent 360deg
-    );
+/* Play button */
 
-    animation: borderSpin 2.5s linear infinite;
+button {
+  width: 32px;
+  height: 30px;
 
-    filter: blur(3px);
-  }
+  padding: 0;
 
+  /* ALSO TRANSPARENT */
+  background: rgba(0, 0, 0, 0.08);
 
-  /*
-    Second sharper layer
-    makes the moving light more obvious
-  */
+  border: 1px solid rgba(120, 220, 255, 0.6);
 
-  #player::after {
-    content: "";
+  border-radius: 8px;
 
-    position: absolute;
+  color: #eaf9ff;
 
-    inset: -50%;
+  font-size: 14px;
 
-    z-index: -1;
+  cursor: pointer;
 
-    background: conic-gradient(
-      from 0deg,
+  box-shadow:
+    0 0 6px rgba(70, 190, 255, 0.35);
 
-      transparent 0deg,
-      transparent 330deg,
+  transition: 0.2s ease;
+}
 
-      rgba(130, 225, 255, 0.1) 338deg,
-      rgba(170, 240, 255, 1) 346deg,
-      rgba(80, 190, 255, 0.2) 353deg,
 
-      transparent 360deg
-    );
+button:hover {
+  background: rgba(80, 200, 255, 0.08);
 
-    animation: borderSpin 2.5s linear infinite;
+  border-color: rgba(180, 240, 255, 1);
 
-    filter: blur(1px);
-  }
+  box-shadow:
+    0 0 8px rgba(100, 220, 255, 0.9),
+    0 0 18px rgba(50, 170, 255, 0.45);
 
+  transform: translateY(-1px);
+}
 
-  @keyframes borderSpin {
 
-    from {
-      transform: rotate(0deg);
-    }
+button:active {
+  transform: scale(0.92);
+}
 
-    to {
-      transform: rotate(360deg);
-    }
 
-  }
+/* =========================
+   VOLUME
+   ========================= */
 
+#volWrap {
+  display: flex;
 
-  /* =========================
-     HOVER
-     ========================= */
+  align-items: center;
 
-  #player:hover {
-    transform: scale(1.015);
+  gap: 5px;
 
-    border-color: rgba(170, 235, 255, 0.8);
+  color: #bdeaff;
 
-    box-shadow:
-      0 0 6px rgba(120, 220, 255, 0.7),
-      0 0 15px rgba(70, 190, 255, 0.35);
-  }
+  font-size: 12px;
 
+  text-shadow:
+    0 0 6px rgba(80, 200, 255, 0.7);
+}
 
-  /* =========================
-     TITLE
-     ========================= */
 
-  #title {
-    position: relative;
-    z-index: 5;
+#volume {
+  width: 70px;
 
-    font-size: clamp(11px, 5vw, 15px);
+  height: 4px;
 
-    font-weight: 600;
+  accent-color: #61cfff;
 
-    margin-bottom: 8px;
+  cursor: pointer;
 
-    color: #eaf7ff;
+  filter:
+    drop-shadow(0 0 4px rgba(80, 200, 255, 0.7));
+}
 
-    text-shadow:
-      0 0 6px rgba(100, 210, 255, 0.7);
 
-    white-space: nowrap;
+/* =========================
+   PROGRESS
+   ========================= */
 
-    overflow: hidden;
+#progress {
+  position: relative;
 
-    text-overflow: ellipsis;
-  }
+  z-index: 5;
 
+  display: block;
 
-  /* =========================
-     CONTROLS
-     ========================= */
+  width: 100%;
 
-  #controls {
-    position: relative;
-    z-index: 5;
+  height: 5px;
 
-    display: flex;
+  margin-top: 10px;
 
-    align-items: center;
+  accent-color: #61cfff;
 
-    gap: 8px;
-  }
+  cursor: pointer;
 
+  filter:
+    drop-shadow(0 0 4px rgba(80, 200, 255, 0.7));
+}
 
-  /* =========================
-     PLAY BUTTON
-     ========================= */
 
-  button {
-    width: 32px;
-    height: 30px;
+/* =========================
+   STATUS
+   ========================= */
 
-    padding: 0;
+#status {
+  position: relative;
 
-    background: rgba(0, 0, 0, 0.15);
+  z-index: 5;
 
-    border: 1px solid rgba(120, 215, 255, 0.55);
+  color: rgba(205, 235, 250, 0.7);
 
-    border-radius: 8px;
+  font-size: 9px;
 
-    color: #e8f9ff;
-
-    font-size: 14px;
-
-    cursor: pointer;
-
-    box-shadow:
-      0 0 5px rgba(70, 190, 255, 0.25);
-
-    transition:
-      0.2s ease;
-  }
-
-
-  button:hover {
-
-    background: rgba(70, 190, 255, 0.12);
-
-    border-color: rgba(170, 235, 255, 1);
-
-    color: white;
-
-    box-shadow:
-      0 0 8px rgba(100, 215, 255, 0.8),
-      0 0 18px rgba(50, 170, 255, 0.4);
-
-    transform: translateY(-1px);
-  }
-
-
-  button:active {
-    transform: scale(0.92);
-  }
-
-
-  /* =========================
-     VOLUME
-     ========================= */
-
-  #volWrap {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 5px;
-
-    color: #bde9ff;
-
-    font-size: 12px;
-
-    text-shadow:
-      0 0 6px rgba(80, 200, 255, 0.6);
-  }
-
-
-  #volume {
-
-    width: 70px;
-
-    height: 4px;
-
-    accent-color: #61cfff;
-
-    cursor: pointer;
-  }
-
-
-  /* =========================
-     PROGRESS
-     ========================= */
-
-  #progress {
-
-    position: relative;
-
-    z-index: 5;
-
-    display: block;
-
-    width: 100%;
-
-    height: 5px;
-
-    margin-top: 10px;
-
-    accent-color: #61cfff;
-
-    cursor: pointer;
-  }
-
-
-  /* =========================
-     STATUS
-     ========================= */
-
-  #status {
-
-    position: relative;
-
-    z-index: 5;
-
-    color: rgba(205, 235, 250, 0.65);
-
-    font-size: 9px;
-
-    margin-top: 4px;
-  }
-
+  margin-top: 4px;
+}
 </style>
 </head>
 
