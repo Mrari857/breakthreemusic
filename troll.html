@@ -14,18 +14,25 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: transparent !important;
-  background-color: transparent !important;
   overflow: hidden;
+
+  background: transparent !important;
 }
 
 body {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  font-family: system-ui, sans-serif;
+  color: white;
 }
 
-/* PLAYER */
+
+/* =========================
+   PLAYER
+   ========================= */
+
 #player {
   position: relative;
 
@@ -34,81 +41,100 @@ body {
 
   padding: 10px;
 
-  background: transparent !important;
-  background-color: transparent !important;
+  border-radius: 20px;
 
-  border: 1px solid rgba(120, 220, 255, 0.8);
-  border-radius: 18px;
+  background: transparent !important;
+
+  border: 1px solid rgba(130, 220, 255, 0.45);
 
   overflow: hidden;
 
-  /* ONLY BORDER GLOW */
   box-shadow:
-    0 0 5px rgba(100, 210, 255, 0.9),
-    0 0 15px rgba(70, 190, 255, 0.6),
-    0 0 30px rgba(50, 160, 255, 0.35);
+    0 0 6px rgba(70, 190, 255, 0.35);
+
+  transition: transform 0.25s ease;
 }
 
-/* MOVING LIGHT AROUND BORDER */
+
+/* =========================
+   MOVING BORDER LIGHT
+   ========================= */
+
 #player::before {
   content: "";
 
   position: absolute;
+
   inset: -2px;
 
-  border-radius: 20px;
+  border-radius: 22px;
 
   padding: 2px;
 
   background: conic-gradient(
     from 0deg,
+
     transparent 0deg,
     transparent 300deg,
-    #35bfff 325deg,
-    #c8f5ff 345deg,
-    #35bfff 355deg,
+
+    rgba(50, 180, 255, 0.1) 320deg,
+    rgba(80, 200, 255, 0.7) 338deg,
+    #d5f7ff 350deg,
+    rgba(80, 200, 255, 0.7) 357deg,
+
     transparent 360deg
   );
 
   /*
-    Cut out the middle so ONLY the border remains
+    Show only the border
   */
   -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
 
   -webkit-mask-composite: xor;
 
   mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
 
   mask-composite: exclude;
 
-  animation: rotateGlow 2s linear infinite;
+  filter:
+    drop-shadow(0 0 3px #5dccff)
+    drop-shadow(0 0 8px rgba(60, 190, 255, 0.8));
+
+  animation: borderRotate 2.8s linear infinite;
 
   pointer-events: none;
 }
 
-/* BIG SOFT GLOW */
+
+/* =========================
+   SOFT BORDER GLOW
+   ========================= */
+
 #player::after {
   content: "";
 
   position: absolute;
-  inset: -8px;
 
-  border-radius: 25px;
+  inset: 0;
 
-  border: 3px solid rgba(60, 190, 255, 0.35);
+  border-radius: 20px;
 
-  filter: blur(8px);
+  border: 2px solid transparent;
 
-  animation: pulseGlow 1.8s ease-in-out infinite alternate;
+  box-shadow:
+    0 0 8px rgba(80, 200, 255, 0.35);
 
   pointer-events: none;
+
+  animation: softGlow 2s ease-in-out infinite alternate;
 }
 
-@keyframes rotateGlow {
+
+@keyframes borderRotate {
   from {
     transform: rotate(0deg);
   }
@@ -118,107 +144,150 @@ body {
   }
 }
 
-@keyframes pulseGlow {
+
+@keyframes softGlow {
   from {
-    opacity: 0.35;
+    opacity: 0.4;
   }
 
   to {
-    opacity: 1;
+    opacity: 0.9;
   }
 }
 
-/* TITLE */
+
+/* =========================
+   HOVER
+   ========================= */
+
+#player:hover {
+  transform: scale(1.01);
+
+  border-color: rgba(180, 240, 255, 0.7);
+
+  box-shadow:
+    0 0 8px rgba(100, 210, 255, 0.6),
+    0 0 18px rgba(60, 180, 255, 0.3);
+}
+
+
+/* =========================
+   TITLE
+   ========================= */
+
 #title {
   position: relative;
   z-index: 5;
 
-  color: white;
-
-  font-size: 14px;
-  font-weight: 600;
-
   margin-bottom: 8px;
 
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #f0fbff;
+
   text-shadow:
-    0 0 6px #55cfff,
-    0 0 12px rgba(50, 180, 255, 0.6);
+    0 0 5px rgba(100, 210, 255, 0.8);
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* CONTROLS */
+
+/* =========================
+   CONTROLS
+   ========================= */
+
 #controls {
   position: relative;
   z-index: 5;
 
   display: flex;
   align-items: center;
-  gap: 8px;
+
+  gap: 7px;
 }
 
-/* BUTTON */
+
+/* =========================
+   BUTTON
+   ========================= */
+
 button {
   width: 32px;
   height: 30px;
 
   padding: 0;
 
-  background: transparent !important;
+  background: transparent;
 
-  border: 1px solid rgba(120, 220, 255, 0.7);
+  border: 1px solid rgba(120, 215, 255, 0.6);
 
-  border-radius: 8px;
+  border-radius: 7px;
 
-  color: white;
+  color: #e9faff;
+
+  font-size: 14px;
 
   cursor: pointer;
 
   box-shadow:
-    0 0 6px rgba(70, 190, 255, 0.7);
+    0 0 5px rgba(70, 190, 255, 0.35);
 
   transition: 0.2s ease;
 }
 
+
 button:hover {
-  border-color: #c8f5ff;
+  border-color: #c9f5ff;
 
   box-shadow:
-    0 0 8px #70dfff,
-    0 0 18px rgba(50, 180, 255, 0.8);
+    0 0 7px #66d6ff,
+    0 0 15px rgba(60, 180, 255, 0.6);
 
-  transform: scale(1.05);
+  transform: translateY(-1px);
 }
+
 
 button:active {
   transform: scale(0.92);
 }
 
-/* VOLUME */
+
+/* =========================
+   VOLUME
+   ========================= */
+
 #volWrap {
   display: flex;
   align-items: center;
+
   gap: 5px;
 
-  color: white;
+  color: #c9efff;
+
+  font-size: 12px;
 
   text-shadow:
-    0 0 6px #55cfff;
+    0 0 5px rgba(80, 200, 255, 0.7);
 }
+
 
 #volume {
   width: 70px;
   height: 4px;
 
-  accent-color: #55cfff;
+  accent-color: #62cfff;
 
-  filter:
-    drop-shadow(0 0 4px #55cfff);
+  cursor: pointer;
 }
 
-/* PROGRESS */
+
+/* =========================
+   PROGRESS
+   ========================= */
+
 #progress {
   position: relative;
   z-index: 5;
@@ -228,10 +297,25 @@ button:active {
 
   margin-top: 10px;
 
-  accent-color: #55cfff;
+  accent-color: #62cfff;
 
-  filter:
-    drop-shadow(0 0 4px #55cfff);
+  cursor: pointer;
+}
+
+
+/* =========================
+   STATUS
+   ========================= */
+
+#status {
+  position: relative;
+  z-index: 5;
+
+  margin-top: 4px;
+
+  color: rgba(210, 240, 250, 0.7);
+
+  font-size: 9px;
 }
 </style>
 </head>
