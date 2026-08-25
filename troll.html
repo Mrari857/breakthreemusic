@@ -80,12 +80,19 @@
     margin-top: 6px;
     accent-color: #00ffcc;
   }
+
+  #status {
+    font-size: 9px;
+    margin-top: 3px;
+    opacity: 0.7;
+  }
 </style>
 </head>
 
 <body>
 
 <div id="player">
+
   <div id="title">Dominic Fike - Baby Doll</div>
 
   <div id="controls">
@@ -93,18 +100,31 @@
 
     <div id="volWrap">
       🔊
-      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.7">
+      <input
+        type="range"
+        id="volume"
+        min="0"
+        max="1"
+        step="0.01"
+        value="0.7"
+      >
     </div>
   </div>
 
-  <input type="range" id="progress" value="0" min="0" step="1">
+  <input
+    type="range"
+    id="progress"
+    value="0"
+    min="0"
+    max="100"
+    step="1"
+  >
+
+  <div id="status">Ready</div>
+
 </div>
 
-<audio
-  id="audio"
-  preload="metadata"
-  crossorigin="anonymous"
->
+<audio id="audio" preload="metadata">
   <source
     src="https://cdn.jsdelivr.net/gh/mrari857/Music@main/Dominic_Fike_-_Baby_Doll_(mp3.pm).mp3"
     type="audio/mpeg"
@@ -112,49 +132,94 @@
 </audio>
 
 <script>
-  const audio = document.getElementById("audio");
-  const playPause = document.getElementById("playPause");
-  const progress = document.getElementById("progress");
-  const volume = document.getElementById("volume");
+const audio = document.getElementById("audio");
+const playPause = document.getElementById("playPause");
+const progress = document.getElementById("progress");
+const volume = document.getElementById("volume");
+const status = document.getElementById("status");
 
-  audio.volume = volume.value;
+audio.volume = 0.7;
 
-  playPause.addEventListener("click", async () => {
+playPause.addEventListener("click", async () => {
+
+  if (audio.paused) {
+
     try {
-      if (audio.paused) {
-        await audio.play();
-        playPause.textContent = "⏸";
-      } else {
-        audio.pause();
-        playPause.textContent = "▶";
-      }
-    } catch (e) {
-      console.error("Audio playback blocked:", e);
-      playPause.textContent = "▶";
-    }
-  });
+      status.textContent = "Loading...";
 
-  volume.addEventListener("input", () => {
-    audio.volume = volume.value;
-  });
+      await audio.play();
 
-  audio.addEventListener("loadedmetadata", () => {
-    if (!isNaN(audio.duration)) {
-      progress.max = Math.floor(audio.duration);
-    }
-  });
+      playPause.textContent = "⏸";
+      status.textContent = "Playing";
 
-  audio.addEventListener("timeupdate", () => {
-    if (!isNaN(audio.currentTime)) {
-      progress.value = Math.floor(audio.currentTime);
-    }
-  });
+    } catch (error) {
 
-  progress.addEventListener("input", () => {
-    if (!isNaN(audio.duration)) {
-      audio.currentTime = progress.value;
+      console.error(error);
+      status.textContent = "Audio failed to play";
+
     }
-  });
+
+  } else {
+
+    audio.pause();
+
+    playPause.textContent = "▶";
+    status.textContent = "Paused";
+
+  }
+
+});
+
+volume.addEventListener("input", () => {
+  audio.volume = Number(volume.value);
+});
+
+audio.addEventListener("loadedmetadata", () => {
+
+  if (isFinite(audio.duration)) {
+    progress.max = Math.floor(audio.duration);
+    status.textContent = "Ready";
+  }
+
+});
+
+audio.addEventListener("timeupdate", () => {
+
+  if (isFinite(audio.duration)) {
+    progress.value = Math.floor(audio.currentTime);
+  }
+
+});
+
+progress.addEventListener("input", () => {
+
+  if (isFinite(audio.duration)) {
+    audio.currentTime = Number(progress.value);
+  }
+
+});
+
+audio.addEventListener("ended", () => {
+
+  playPause.textContent = "▶";
+  status.textContent = "Finished";
+  progress.value = 0;
+
+});
+
+audio.addEventListener("error", () => {
+
+  console.error("Audio error:", audio.error);
+
+  status.textContent = "MP3 could not be loaded";
+
+});
+
+audio.addEventListener("canplay", () => {
+
+  status.textContent = "Ready";
+
+});
 </script>
 
 </body>
